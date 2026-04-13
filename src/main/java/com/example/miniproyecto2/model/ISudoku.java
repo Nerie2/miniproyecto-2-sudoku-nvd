@@ -1,8 +1,8 @@
 package com.example.miniproyecto2.model;
 
 public interface ISudoku {
-    boolean checkInput();
+    boolean checkInput(int x, int y, int number);
 
-    String sendInput();
+    void sendInput(int x, int y, int number);
     String searchInput();
 }
