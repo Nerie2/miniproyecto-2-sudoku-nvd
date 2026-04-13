@@ -1,5 +1,6 @@
 package com.example.miniproyecto2.controller;
 
+import com.example.miniproyecto2.model.Sudoku;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -9,6 +10,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 
 import javax.swing.*;
+import java.util.Objects;
 
 
 public class GameController {
@@ -17,6 +19,7 @@ public class GameController {
     int[] position = new int[2];
     @FXML
     private AnchorPane rootPane;
+    Boolean focus = false;
     public Button getButtonAt(int col, int row) {
 
         for (Node node : gridPanel.getChildren()) {
@@ -27,18 +30,10 @@ public class GameController {
 
             int colIndex;
 
-            if (c == null) {
-                colIndex = 0;
-            } else {
-                colIndex = c;
-            }
+            colIndex = Objects.requireNonNullElse(c, 0);
 
             int rowIndex;
-            if (r == null) {
-                rowIndex = 0;
-            } else {
-                rowIndex = r;
-            }
+            rowIndex = Objects.requireNonNullElse(r, 0);
 
             if (colIndex == col && rowIndex == row) {
                 return (Button) node;
@@ -50,6 +45,8 @@ public class GameController {
     public void buttonAction(ActionEvent actionEvent) {
         Button button = (Button) actionEvent.getSource();
         position = getButtonData(button);
+        System.out.println(position[0] + ", " + position[1]);
+        focus = true;
 
     }
     public int[] getButtonData(javafx.scene.control.Button button){
@@ -79,8 +76,15 @@ public class GameController {
     }
     void sendUserInput(char letter){
         if(checkInput(letter)){
-            //Aqui se debe de enviar la letra al modelo
+            if(Sudoku.getInstance().sendInput(position[0] ,position[1], letter-'0' )){
+                System.out.println("SE COLOCO");
+                refreshGrid();
+            }
+            else{
+                System.out.println(" NO SE COLOCO");
+            }
         }
+        focus = false;
 
 
     }
@@ -88,7 +92,10 @@ public class GameController {
     private void handleKeyPressed(KeyEvent event) {
         String input = event.getText();
         try  {
-           sendUserInput(input.charAt(0));
+            if(focus){
+                sendUserInput(input.charAt(0));
+            }
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -99,15 +106,26 @@ public class GameController {
 
     }
 
-    @FXML
-    private Button miBoton;
+ private void refreshGrid(){
+     for (int i = 0; i <=5; i++) {
+         for (int j = 0; j <=5; j++) {
+
+             getButtonAt(i ,j).setText(String.valueOf(Sudoku.getInstance().infoGrid(i , j)));
+         }
+     }
+
+ }
 
     @FXML
     private void onBotonClick() {
 
         System.out.println("¡El juego ha comenzado!");
         // Aquí puedes iniciar la lógica del juego
-        rootPane.requestFocus();
+        if(rootPane!=null){
+            rootPane.requestFocus();
+        }
+
+        refreshGrid();
     }
 
 

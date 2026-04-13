@@ -36,10 +36,12 @@ public abstract class AbstractSudoku implements ISudoku{
     }
 
     @Override
-    public void sendInput(int x, int y, int number) {
+    public Boolean sendInput(int x, int y, int number) {
         if (checkInput(x,y,number)){
             tablero [x][y]=number;
+            return true;
         }
+        return false;
     }
 
     @Override
@@ -56,6 +58,11 @@ public abstract class AbstractSudoku implements ISudoku{
             }
         }
         return "No hay pistas disponibles";
+    }
+    @Override
+    public int infoGrid(int x , int y){
+        return tablero[x][y];
+
     }
 
 }
