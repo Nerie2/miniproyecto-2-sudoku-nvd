@@ -1,19 +1,18 @@
 package com.example.miniproyecto2;
 
+import com.example.miniproyecto2.view.GameStage;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+
 public class Main extends Application {
 
     @Override
-    public void start(Stage stage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/miniproyecto2/ViewGame.fxml"));
-        Scene scene = new Scene(loader.load());
-        stage.setScene(scene);
-        stage.setTitle("Juego");
-        stage.show();
+    public void start(Stage primaryStage) throws IOException {
+        GameStage.getInstance();
     }
 
     public static void main(String[] args) {
