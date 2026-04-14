@@ -1,7 +1,9 @@
 package com.example.miniproyecto2.model;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 public abstract class AbstractSudoku implements ISudoku{
 
@@ -70,49 +72,58 @@ public abstract class AbstractSudoku implements ISudoku{
 
     }
     @Override
-    public void fillSudoku(){
-        int[] numbers =new int[] {1, 2, 3, 4, 5, 6};
-
-        for (int i = 1; i < 7; ++i) {
-
-            //num
-            int num = (int)(Math.random() * 5) ;
-
-            for (int j = 0; j < i; j++) {
-                //cords
-                int x = (int)(Math.random() * 5);
-                int y = (int)(Math.random() * 5);
-                if(tablero[x][y]==0 ){
-                    for (int k = 0; k < 5; k++) {
-                        if (num==6){num=5;}
-                        if(numbers[num]==0){
-                            if(num==5){
-                                num= 0;
-                            }
-                            else{
-                                ++num;
-                            }
-                        }
-                        else{
-                            break;
-                        }
-
-                    }//Encuentra un numero sin usar
-
-                    sendInput(x, y , numbers[num]);
+    public void fillSudoku() {
 
 
+        fillRecursive(0, 0);
+        int kill =0;
+        do {
+            kill = (int)(Math.random() * 30);
+        }while (kill<20);
 
+        int killed= 0;
+        while (killed < kill) {
+            // Generamos coordenadas del 0 al 5
+            int x = (int)(Math.random() * 6);
+            int y = (int)(Math.random() * 6);
 
-                }
+            // Si la casilla tiene un número, la ponemos a 0
+            if (tablero[x][y] != 0) {
+                tablero[x][y] = 0;
+                killed++;
             }
-            numbers[num]=0;
         }
 
-
-
-
     }
-    //COMENTARIO PARA BORRAR AL DOCUMENTAR: la funcion elije un orden aleatorio de numeros para rellenar, donde el primero recibe 5 numeros el siguiente 4 y asi hasta llegar a 0
+
+    private boolean fillRecursive(int fila, int col) {
+
+        if (col == 6) {
+            col = 0;
+            fila++;
+        }
+        if (fila == 6) return true;
+
+
+        Integer[] numbers = {1, 2, 3, 4, 5, 6};
+        List<Integer> listaNums = Arrays.asList(numbers);
+        Collections.shuffle(listaNums); //random
+
+        for (int num : listaNums) {
+
+            if (sendInput(fila, col, num)) {
+
+                // Si sendInput fue true, intentamos llenar la siguiente casilla
+                if (fillRecursive(fila, col + 1)) {
+                    return true;
+                }
+
+                //recursivamente se llama
+                tablero[fila][col] = 0;
+            }
+        }
+
+        return false;
+    }
 
 }

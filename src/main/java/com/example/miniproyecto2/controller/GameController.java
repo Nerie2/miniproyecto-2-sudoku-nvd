@@ -103,6 +103,16 @@ public class GameController {
 
     }
     void hint(){
+        int[] hint = Sudoku.getInstance().searchInput();
+        if (hint!=null){
+            String text = String.valueOf(hint[2]);
+            getButtonAt(hint[0], hint[1]).setText(text);
+            getButtonAt(hint[0], hint[1]).setStyle(
+                    "-fx-background-color: #ff4d4d;" +
+                            "-fx-text-fill: white;" +
+                            "-fx-background-radius: 10;"
+            );
+        }
 
     }
 
@@ -119,13 +129,14 @@ public class GameController {
     @FXML
     private void onBotonClick() {
 
-        System.out.println("¡El juego ha comenzado!");
         // Aquí puedes iniciar la lógica del juego
         if(rootPane!=null){
             rootPane.requestFocus();
         }
-
         refreshGrid();
+        hint();
+
+
     }
 
 
