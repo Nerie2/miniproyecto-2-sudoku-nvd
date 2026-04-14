@@ -77,14 +77,14 @@ public class GameController {
     void sendUserInput(char letter){
         if(checkInput(letter)){
             if(Sudoku.getInstance().sendInput(position[0] ,position[1], letter-'0' )){
-                System.out.println("SE COLOCO");
+                focus = false;
                 refreshGrid();
             }
             else{
                 System.out.println(" NO SE COLOCO");
             }
         }
-        focus = false;
+
 
 
     }

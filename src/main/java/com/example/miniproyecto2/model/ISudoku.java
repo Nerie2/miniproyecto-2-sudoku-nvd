@@ -4,6 +4,9 @@ public interface ISudoku {
     boolean checkInput(int x, int y, int number);
 
     Boolean sendInput(int x, int y, int number);
-    String searchInput();
+    int[] searchInput();
     int infoGrid(int x , int y);
+
+
+    void fillSudoku();
 }
