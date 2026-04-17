@@ -25,21 +25,25 @@ public abstract class AbstractSudoku implements ISudoku{
                     return false;
                 }
             }
+            System.out.println("verificando");
         }
 
         for (int col=0; col<6; col++){
             if (tablero[x][col]==number){
                 return false;
             }
+            System.out.println("verificando");
         }
 
         for (int row=0; row<6; row++){
             if (tablero[row][y]==number){
                 return false;
             }
+            System.out.println("verificando");
         }
 
         return true;
+
     }
 
     @Override
