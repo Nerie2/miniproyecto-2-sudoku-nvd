@@ -16,30 +16,33 @@ public abstract class AbstractSudoku implements ISudoku{
         if (number<1 || number>6){
             return false;
         }
-        int starRow = (x/2)*2;
-        int starCol= (y/3)*3;
 
-        for (int i =0; i <2; i++){
-            for (int j=0; j<3; j++){
+        int starRow = 0;
+        if(x>2) starRow = 3;
+        int starCol= (y/2)*2;
+
+
+        for (int i =0; i <3; i++){
+            for (int j=0; j<2; j++){
                 if (tablero [starRow+i][starCol+j]==number){
                     return false;
                 }
             }
-            System.out.println("verificando");
+
         }
 
         for (int col=0; col<6; col++){
             if (tablero[x][col]==number){
                 return false;
             }
-            System.out.println("verificando");
+
         }
 
         for (int row=0; row<6; row++){
             if (tablero[row][y]==number){
                 return false;
             }
-            System.out.println("verificando");
+
         }
 
         return true;
@@ -81,7 +84,7 @@ public abstract class AbstractSudoku implements ISudoku{
 
         fillRecursive(0, 0);
         int kill =0;
-        do {
+        /*do {
             kill = (int)(Math.random() * 30);
         }while (kill<20);
 
@@ -96,7 +99,7 @@ public abstract class AbstractSudoku implements ISudoku{
                 tablero[x][y] = 0;
                 killed++;
             }
-        }
+        }*/
 
     }
 

@@ -134,7 +134,7 @@ public class GameController {
             rootPane.requestFocus();
         }
         refreshGrid();
-        hint();
+        //hint();
 
 
     }
