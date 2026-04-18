@@ -1,13 +1,15 @@
 package com.example.miniproyecto2.model;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
+
 import java.util.Collections;
 import java.util.List;
 
 public abstract class AbstractSudoku implements ISudoku{
 
     int[][] tablero = new int[6][6];
+    List<int[]> listHints =new ArrayList<>();
     public AbstractSudoku(){
         fillSudoku();
     }
@@ -52,6 +54,16 @@ public abstract class AbstractSudoku implements ISudoku{
     @Override
     public Boolean sendInput(int x, int y, int number) {
         if (checkInput(x,y,number)){
+            if(listHints != null){
+                if(!listHints.isEmpty()){
+                    int[] hint = listHints.get(0);
+                    if(hint[0] == x &&  hint[1] == y && hint[2] == number ){
+                        listHints.remove(0);
+                    }
+                } // revisa si lo que se modifica fue una pista
+            }
+
+
             tablero [x][y]=number;
             return true;
         }
@@ -60,18 +72,11 @@ public abstract class AbstractSudoku implements ISudoku{
 
     @Override
     public int[] searchInput() {
-        for (int i=0; i <6; i++){
-            for(int j=0; j<6; j++){
-                if (tablero[i][j]==0) {
-                    for (int num=1; num<=6; num++){
-                        if (checkInput(i,j,num)){
-                            return new int[]{i,j,num};
-                        }
-                    }
-                }
-            }
-        }
+        if(listHints == null) return null;
+        if(listHints.get(0) != null) return listHints.get(0);
         return null;
+
+
     }
     @Override
     public int infoGrid(int x , int y){
@@ -83,23 +88,33 @@ public abstract class AbstractSudoku implements ISudoku{
 
 
         fillRecursive(0, 0);
-        int kill =0;
-        /*do {
-            kill = (int)(Math.random() * 30);
-        }while (kill<20);
+        int hint;
+
+        hint = (int)(Math.random() * 17);
+        if(hint<10) hint +=5;
+
 
         int killed= 0;
-        while (killed < kill) {
+        while (killed < hint) {
             // Generamos coordenadas del 0 al 5
             int x = (int)(Math.random() * 6);
             int y = (int)(Math.random() * 6);
 
             // Si la casilla tiene un número, la ponemos a 0
-            if (tablero[x][y] != 0) {
-                tablero[x][y] = 0;
+
+            if ( addHint(x ,y ,tablero[x][y] )) {
                 killed++;
             }
-        }*/
+        }
+
+    }
+    private Boolean addHint(int x, int y, int number){
+        if ( tablero[x][y]!= 0) {
+            listHints.add(new int[]{x, y, number});
+            tablero[x][y] = 0;
+            return true;
+        }
+        return false;
 
     }
 
@@ -113,10 +128,10 @@ public abstract class AbstractSudoku implements ISudoku{
 
 
         Integer[] numbers = {1, 2, 3, 4, 5, 6};
-        List<Integer> listaNums = Arrays.asList(numbers);
-        Collections.shuffle(listaNums); //random
+        List<Integer> listNums = Arrays.asList(numbers);
+        Collections.shuffle(listNums); //random
 
-        for (int num : listaNums) {
+        for (int num : listNums) {
 
             if (sendInput(fila, col, num)) {
 
@@ -130,7 +145,7 @@ public abstract class AbstractSudoku implements ISudoku{
             }
         }
 
-        return false;
+        return false; // no se pudo llenar de ninguna manera
     }
 
 }
